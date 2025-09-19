@@ -14,7 +14,7 @@ class Model:
         primary_key=True,
         index=True,
         nullable=False,
-        default=str(uuid.uuid4())
+        default=lambda: str(uuid.uuid4())
     )
     created_at: Mapped[datetime] = mapped_column(
         DateTime(timezone=True),
