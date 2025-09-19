@@ -19,4 +19,14 @@ async def get_current_user(
     try:
         return await decode_token(token)
     except (Exception,JoseError) as e:
-        raise ForbiddenException(message="Forbidden")
+        raise ForbiddenException()
+
+async def get_admin(
+    user: Dict[str,Any] = Depends(get_current_user)
+    ) -> Dict[str,Any]:
+    """
+        Get current logged in admin user.
+    """
+    if user["role"] != "admin":
+        raise ForbiddenException()
+    return user
