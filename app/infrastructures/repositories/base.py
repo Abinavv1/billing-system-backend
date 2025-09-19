@@ -8,6 +8,9 @@ from app.infrastructures.models import Model
 T = TypeVar("T",bound=Model)
 
 class Repository(Generic[T]):
+    """
+        Generic base repository.
+    """
     def __init__(self,session: AsyncSession,model: Type[T]) -> None:
         self._session = session
         self._model = model
@@ -38,8 +41,7 @@ class Repository(Generic[T]):
         """
             Retrieve a model instance by its ID.
         """
-        result = await self._session.get(self._model,id)
-        return result
+        return await self._session.get(self._model,id)
     
     async def retrieve_all(self) -> List[T]:
         """
