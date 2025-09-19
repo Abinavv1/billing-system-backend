@@ -2,11 +2,11 @@ from sqlalchemy.orm import mapped_column , Mapped
 from sqlalchemy import String , Boolean
 
 from .base import Model
-from app.infrastructures.db.meta import UserDBMeta
+from app.infrastructures.database.meta import UserDBMeta
 
 class User(Model,UserDBMeta):
     """
-        Class representing staff in database.
+        Class representing user in database.
     """
     __tablename__ = "users"
     
