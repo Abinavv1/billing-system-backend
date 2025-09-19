@@ -1,10 +1,10 @@
 from dependency_injector import containers , providers
 
 from app.core.settings import get_settings
-from app.infrastructures.db.engine import Database
-from app.infrastructures.db.meta import UserDBMeta
-from app.infrastructures.repositories import UserRepository
-from app.services import UserService , AuthService
+from app.infrastructures.database.engine import Database
+from app.infrastructures.database.meta import UserDBMeta
+from app.infrastructures.repositories import UserRepository , MenuItemRepository
+from app.services import UserService , AuthService , MenuItemService
 
 settings = get_settings()
 
@@ -30,6 +30,11 @@ class Container(containers.DeclarativeContainer):
         session=database_session
     )
     
+    menu_item_repo = providers.Factory(
+        MenuItemRepository,
+        session=database_session
+    )
+    
     user_service = providers.Factory(
         UserService,
         user_repo=user_repo
@@ -39,5 +44,12 @@ class Container(containers.DeclarativeContainer):
         AuthService,
         user_repo=user_repo
     )
+    
+    menu_item_service = providers.Factory(
+        MenuItemService,
+        menu_item_repo=menu_item_repo
+    )
+    
+
 
 container = Container()
