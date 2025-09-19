@@ -18,7 +18,7 @@ async def generate_token(payload: Dict[str,Any]) -> str:
         expire_time = datetime.now(timezone.utc) + timedelta(minutes=_TOKEN_EXPIRY)
         payload.update({
             "exp": expire_time,
-            "iat": datetime.utcnow()
+            "iat": datetime.now(timezone.utc)
         })
         
         token = jwt.encode(
