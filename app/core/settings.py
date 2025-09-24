@@ -12,6 +12,8 @@ class Settings(BaseSettings):
     JWT_ALGORITHM: str
     JWT_TOKEN_EXPIRY: int
     
+    IP_HOST: str
+    
     class Config:
         env_file = ".env"
         env_file_encoding = "utf-8"
