@@ -5,7 +5,6 @@ from app.core.schemas.order import OrderResponse
 from app.core.schemas.generic import MessageResponse
 from app.core.exceptions import NotFoundException , InternalServerException
 from app.infrastructures.repositories import MenuItemRepository , OrderRepository
-from app.infrastructures.gateways.payment import EsewaGateway
 
 class OrderService:
     """
@@ -19,11 +18,11 @@ class OrderService:
         self.menu_item_repo = menu_item_repo
         self.order_repo = order_repo
     
-    async def create_order(self,type: PaymentType,data: List[Dict]):
+    async def create_order(self,type: PaymentType,data: List[Dict[str,Any]]):
         total: float = 0.0
         
         for item in data:
-            menu_item = await self.menu_item_repo.retrieve_by_id(id=item["id"])
+            menu_item = await self.menu_item_repo.retrieve_by_id(id=item["item_id"])
             if not menu_item:
                 raise NotFoundException(message="Menu item not found.")
             total += item["quantity"] * menu_item.price
