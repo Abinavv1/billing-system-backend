@@ -5,7 +5,7 @@ class OrderProcessData(Schema):
     """
         Schema for process order data.
     """
-    id: str
+    item_id: str
     quantity: int
 
 class OrderResponse(Schema):
