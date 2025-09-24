@@ -24,7 +24,7 @@ async def create_menu_item(
 
 @router.get('/',response_model=List[MenuItemResponse])
 @inject
-async def retrieve_all_menu_item(
+async def retrieve_menu_item_list(
     service: MenuItemService = Depends(Provide[Container.menu_item_service])
 ):
     """
