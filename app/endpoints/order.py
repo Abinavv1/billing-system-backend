@@ -25,4 +25,48 @@ async def create_order(
         item.model_dump()
         for item in request
     ]
-    return await service.process_order(type=type,data=data)
+    return await service.create_order(type=type,data=data)
+
+@router.get('/',response_model=List[OrderResponse])
+@inject
+async def retrieve_order_list(
+    service: OrderService = Depends(Provide[Container.order_service])
+):
+    """
+        Route to list all orders.
+    """
+    return await service.retrieve_all()
+
+@router.get('/{id}',response_model=OrderResponse)
+@inject
+async def retrieve_order_by_id(
+    id: str,
+    service: OrderService = Depends(Provide[Container.order_service])
+):
+    """
+        Route to retrieve a order by its ID.
+    """
+    return await service.retrieve_by_id(id=id)
+
+@router.patch('/{id}',response_model=OrderResponse)
+@inject
+async def update_order_by_id(
+    id: str,
+    request: OrderUpdate,
+    service: OrderService = Depends(Provide[Container.order_service])
+):
+    """
+        Route to update a order by its ID.
+    """
+    return await service.update_by_id(id=id,data=request.model_dump())
+
+@router.delete('/{id}',response_model=MessageResponse)
+@inject
+async def delete_order_by_id(
+    id: str,
+    service: OrderService = Depends(Provide[Container.order_service])
+):
+    """
+        Route to delete a order by its ID.
+    """
+    return await service.delete_by_id(id=id)
