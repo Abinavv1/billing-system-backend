@@ -64,7 +64,6 @@ class Container(containers.DeclarativeContainer):
         OrderService,
         menu_item_repo=menu_item_repo,
         order_repo=order_repo,
-        payment_gateway=esewa_gateway
     )
     
 
