@@ -3,8 +3,9 @@ from dependency_injector import containers , providers
 from app.core.settings import get_settings
 from app.infrastructures.database.engine import Database
 from app.infrastructures.database.meta import UserDBMeta
-from app.infrastructures.repositories import UserRepository , MenuItemRepository
-from app.services import UserService , AuthService , MenuItemService
+from app.infrastructures.gateways.payment import EsewaGateway
+from app.infrastructures.repositories import UserRepository , MenuItemRepository , OrderRepository
+from app.services import UserService , AuthService , MenuItemService , OrderService
 
 settings = get_settings()
 
@@ -35,6 +36,15 @@ class Container(containers.DeclarativeContainer):
         session=database_session
     )
     
+    order_repo = providers.Factory(
+        OrderRepository,
+        session=database_session
+    )
+    
+    esewa_gateway = providers.Singleton(
+        EsewaGateway
+    )
+    
     user_service = providers.Factory(
         UserService,
         user_repo=user_repo
@@ -48,6 +58,13 @@ class Container(containers.DeclarativeContainer):
     menu_item_service = providers.Factory(
         MenuItemService,
         menu_item_repo=menu_item_repo
+    )
+    
+    order_service = providers.Factory(
+        OrderService,
+        menu_item_repo=menu_item_repo,
+        order_repo=order_repo,
+        payment_gateway=esewa_gateway
     )
     
 
