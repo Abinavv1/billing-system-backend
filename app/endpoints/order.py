@@ -5,14 +5,15 @@ from dependency_injector.wiring import inject , Provide
 
 from app.core.enums.payment import PaymentType
 from app.container import Container
-from app.core.schemas.order import OrderProcessData
+from app.core.schemas.generic import MessageResponse
+from app.core.schemas.order import OrderProcessData , OrderResponse , OrderUpdate
 from app.services import OrderService
 
 router = APIRouter(prefix='/order',tags=['Order'])
 
-@router.post('/process/')
+@router.post('/')
 @inject
-async def process_order(
+async def create_order(
     type: PaymentType,
     request: List[OrderProcessData],
     service: OrderService = Depends(Provide[Container.order_service])
