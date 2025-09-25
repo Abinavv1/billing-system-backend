@@ -3,7 +3,6 @@ from typing import List
 from fastapi import APIRouter , Depends
 from dependency_injector.wiring import inject , Provide
 
-from app.core.enums.payment import PaymentType
 from app.container import Container
 from app.core.schemas.generic import MessageResponse
 from app.core.schemas.order import OrderProcessData , OrderResponse , OrderUpdate
@@ -14,7 +13,6 @@ router = APIRouter(prefix='/order',tags=['Order'])
 @router.post('/')
 @inject
 async def create_order(
-    type: PaymentType,
     request: List[OrderProcessData],
     service: OrderService = Depends(Provide[Container.order_service])
 ):
@@ -25,7 +23,7 @@ async def create_order(
         item.model_dump()
         for item in request
     ]
-    return await service.create_order(type=type,data=data)
+    return await service.create_order(data=data)
 
 @router.get('/',response_model=List[OrderResponse])
 @inject
