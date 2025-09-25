@@ -3,7 +3,7 @@ from typing import Dict , List , Any
 from app.core.enums.payment import PaymentType
 from app.core.schemas.order import OrderResponse
 from app.core.schemas.generic import MessageResponse
-from app.core.exceptions import NotFoundException , InternalServerException
+from app.core.exceptions import NotFoundException , InternalServerException , ConflictException
 from app.infrastructures.repositories import MenuItemRepository , OrderRepository
 
 class OrderService:
@@ -18,23 +18,19 @@ class OrderService:
         self.menu_item_repo = menu_item_repo
         self.order_repo = order_repo
     
-    async def create_order(self,type: PaymentType,data: List[Dict[str,Any]]):
+    async def create_order(self,data: List[Dict[str,Any]]):
         total: float = 0.0
         
         for item in data:
             menu_item = await self.menu_item_repo.retrieve_by_id(id=item["item_id"])
             if not menu_item:
-                raise NotFoundException(message="Menu item not found.")
+                raise NotFoundException(message="Order contains unknown items")
+            if not menu_item.is_available:
+                raise ConflictException(message="Order contains items that are not available.")
             total += item["quantity"] * menu_item.price
             
         try:
-            instance = await self.order_repo.create(
-                {
-                    'amount':total,
-                    'type':type.value,
-                    'is_paid':False if type.value == "esewa" else True
-                }
-            )
+            instance = await self.order_repo.create({'amount':total})
             await self.order_repo.commit()
         except Exception as e:
             await self.order_repo.rollback()
