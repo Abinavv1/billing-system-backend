@@ -24,7 +24,7 @@ async def register_user(
     
 @router.get('/',response_model=List[UserResponse])
 @inject
-async def retrieve_users_list(
+async def retrieve_user_list(
     service: UserService = Depends(Provide[Container.user_service])
 ):
     """

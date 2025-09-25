@@ -5,7 +5,7 @@ class OrderProcessData(Schema):
     """
         Schema for process order data.
     """
-    id: str
+    item_id: str
     quantity: int
 
 class OrderResponse(Schema):
@@ -14,13 +14,11 @@ class OrderResponse(Schema):
     """
     id: str
     amount: float
-    type: str
-    is_paid: bool
+    status: str
 
 class OrderUpdate(Schema):
     """
         Schema for order update data.
     """
     amount: Optional[float] = None
-    type: Optional[str] = None
-    is_paid: Optional[bool] = None
+    status: str
